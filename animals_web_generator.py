@@ -20,7 +20,6 @@ def load_api_data(name="fox"):
         json: document about all animals with name
     """
     animals_url = "https://api.api-ninjas.com/v1/animals"
-    name = "fox"
     params = {"name": name, "X-Api-Key": APININJA_KEY}
     fox_info = requests.get(animals_url, params=params)
 
@@ -61,7 +60,8 @@ def write_output(file_path, content):
 
 def main():
     # animals_data = load_data("animals_data.json")
-    animals_data = load_api_data()
+    animal_name = input('Enter a name of an animal: ')
+    animals_data = load_api_data(name=animal_name)
 
     output = ""
     for animal in animals_data:
@@ -72,6 +72,7 @@ def main():
     template = template.replace("__REPLACE_ANIMALS_INFO__", output)
 
     write_output("animals.html", template)
+    print('Website was successfully generated to the file animals.html.')
 
 
 if __name__ == "__main__":
