@@ -10,7 +10,7 @@ def load_data(file_path):
         return json.load(handle)
 
 
-def load_api_data(name="fox"):
+def load_api_data(animal_name="Fox"):
     """
     Fetches animal information from api-ninjas
 
@@ -20,9 +20,8 @@ def load_api_data(name="fox"):
         json: document about all animals with name
     """
     animals_url = "https://api.api-ninjas.com/v1/animals"
-    params = {"name": name, "X-Api-Key": APININJA_KEY}
+    params = {"name": animal_name, "X-Api-Key": APININJA_KEY}
     fox_info = requests.get(animals_url, params=params)
-
     return fox_info.json()
 
 
@@ -58,21 +57,29 @@ def write_output(file_path, content):
         output_file.write(content)
 
 
+def create_html(output):
+    """write an html file according to the template and output
+
+    Args:
+        output (html): html with animal information
+    """
+    template = load_template("animals_template.html")
+    template = template.replace("__REPLACE_ANIMALS_INFO__", output)
+    write_output("animals.html", template)
+    print("Website was successfully generated to the file animals.html.")
+
+
 def main():
     # animals_data = load_data("animals_data.json")
-    animal_name = input('Enter a name of an animal: ')
-    animals_data = load_api_data(name=animal_name)
+    animal_name = input("Enter a name of an animal: ")
+    animals_data = load_api_data(animal_name)
 
     output = ""
     for animal in animals_data:
         output += serialize_animal(animal)
-
-    template = load_template("animals_template.html")
-
-    template = template.replace("__REPLACE_ANIMALS_INFO__", output)
-
-    write_output("animals.html", template)
-    print('Website was successfully generated to the file animals.html.')
+    if output == "":
+        output = f'<h2>The animal "{animal_name}" doesn\'t exist.</h2>'
+    create_html(output)
 
 
 if __name__ == "__main__":
