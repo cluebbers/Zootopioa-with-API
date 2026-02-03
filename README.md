@@ -1,4 +1,4 @@
-# My Awesome Project
+# Zootopia with API
 
 This project fetches data from the animals API and creates a html file with the information of the requested animal.
 
