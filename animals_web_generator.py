@@ -1,28 +1,6 @@
 import json
-import requests
 
-APININJA_KEY = "e7svScyqfFPWDxqYWSHb9it5FqT2jPdG9WAJsHTO"
-
-
-def load_data(file_path):
-    """Loads a JSON file"""
-    with open(file_path, "r") as handle:
-        return json.load(handle)
-
-
-def load_api_data(animal_name="Fox"):
-    """
-    Fetches animal information from api-ninjas
-
-    args
-     name (str): name of the animal, default 'fox'
-    returns
-        json: document about all animals with name
-    """
-    animals_url = "https://api.api-ninjas.com/v1/animals"
-    params = {"name": animal_name, "X-Api-Key": APININJA_KEY}
-    fox_info = requests.get(animals_url, params=params)
-    return fox_info.json()
+import data_fetcher
 
 
 def serialize_animal(animal_obj):
@@ -70,9 +48,9 @@ def create_html(output):
 
 
 def main():
-    # animals_data = load_data("animals_data.json")
+
     animal_name = input("Enter a name of an animal: ")
-    animals_data = load_api_data(animal_name)
+    animals_data = data_fetcher.fetch_data(animal_name)
 
     output = ""
     for animal in animals_data:
